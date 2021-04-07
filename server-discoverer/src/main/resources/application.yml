@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: servicediscoverer
+
+server:
+  servlet:
+    context-path: /${spring.application.name}
+  port: 8761
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false

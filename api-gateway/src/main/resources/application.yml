@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: api-gateway
+  webflux:
+    base-path: /${spring.application.name}
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+          predicates:
+          - name: Path
+            args:
+              pattern: "'${spring.webflux.base-path}/'+serviceId+'/**'"
+          filters:
+          - StripWebFluxBasePath
+          # Set a empty filter to avoid remove serviceId from the path (all services has service id as context-path)
+          # Check GatewayDiscoveryClientAutoConfiguration
+#          - name: RewritePath
+#            args:
+#              regexp: "'/' + serviceId + '/?(?<remaining>.*)'"
+#              replacement: "'/' + serviceId + '/${remaining}'"
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/servicediscoverer/eureka/
